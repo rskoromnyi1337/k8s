@@ -1,0 +1,24 @@
+swapoff -a
+for permanent
+comment *swap* string in /etc/fstab
+sed -i 's/\/swap/#\/swap/g' /etc/fstab
+
+ssh-keygen
+ssh-copy-id ubuntu@k8s-m1
+ssh-copy-id ubuntu@k8s-n1
+ssh-copy-id ubuntu@k8s-n2
+
+https://www.digitalocean.com/community/tutorials/how-to-create-a-kubernetes-cluster-using-kubeadm-on-ubuntu-18-04-ru
+
+ansible-playbook -i inventory.ini kube-dependencies.yml 
+ansible-playbook -i inventory.ini master.yml
+ansible-playbook -i inventory.ini workers.yml
+
+apt-mark showhold
+
+apt-mark hold docker-ce
+apt-mark hold docker-ce-cli
+apt-mark hold kubeadm
+apt-mark hold kubectl
+apt-mark hold kubelet
+apt-mark hold kubernetes-cni
